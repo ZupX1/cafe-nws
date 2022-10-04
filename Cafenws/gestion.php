@@ -7,7 +7,7 @@
             <a href="index.html">Accueil</a>
             <a href="commande.php">Commander</a>
             <a href="gestion.php">Voir les commandes</a>
-            <a href="add.html">Ajouter des produits</a>
+            <a href="add.php">Ajouter/Supprimer des produits</a>
           </div>
       </nav>
 <body id="admin">
@@ -21,8 +21,7 @@
         <td><strong>Produit</strong></td>
         <td><strong>Prix en €/u</strong></td>
         <td><strong>Quantité</strong></td>
-        <td><strong>Validé ?</strong></td>
-        <td></td>   
+        <td><strong>Validé ?</strong></td> 
         <td><strong>Heure de commande</strong></td>
     </tr>
 
@@ -47,10 +46,24 @@ try {
     while($row = $query->fetch()){
         $row = array_map("utf8_encode", $row);
 
-        if(isset($_GET['id_commande'])){
-            $idi=$_GET['id_commande'];
+        if(isset($_GET['id_supp'])){
+            $idi=$_GET['id_supp'];
             $datasupp="DELETE FROM commande WHERE id = $idi";
-            $dbh->prepare($datasupp)->execute(['idi'=> $idi]); 
+            $dbh->prepare($datasupp)->execute(); 
+            header("Location:gestion.php");
+        }
+
+        if(isset($_GET['id_valid'])){
+            $idis=$_GET['id_valid'];
+            $dataup="UPDATE commande SET valide=1 WHERE id = $idis";
+            $dbh->prepare($dataup)->execute(); 
+            header("Location:gestion.php");
+        } 
+        
+        if(isset($_GET['id_annul'])){
+            $idis=$_GET['id_annul'];
+            $dataup="UPDATE commande SET valide=0 WHERE id = $idis";
+            $dbh->prepare($dataup)->execute(); 
             header("Location:gestion.php");
         }
 
@@ -69,12 +82,19 @@ try {
         <td>$lastname</td>
         <td>$choix</td>
         <td>$prix</td>
-        <td>$qtty</td>
-        <td>$valid<input type='checkbox' id='valide' name='valide' value='valide'></td>
-        <td>$date</td>
-        <td><a href='gestion.php?id=".$id."' id='delete'>Supprimer</a></td>
+        <td>$qtty</td>";
+        if ($valid == 0) {
+           echo "<td>Non<a href='gestion.php?id_valid=".$id."' id='update'>&nbsp&nbsp&nbspCliquez pour valider</a></td>";
+        }
+
+        else {
+            echo "<td>Oui<a href='gestion.php?id_annul=".$id."' id='update'>&nbsp&nbsp&nbspCliquez pour annuler</a></td>";
+        }
+        echo "<td>$date</td>
+        <td><a href='gestion.php?id_supp=".$id."' id='delete'>Supprimer</a></td>
         </tr>";
     }
+
     $dbh = null;
 } catch (PDOException $e) {
     print "Erreur !: " . $e->getMessage() . "<br/>";

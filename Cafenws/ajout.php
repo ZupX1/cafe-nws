@@ -29,6 +29,12 @@
             echo "Une variable bug";
         }
 
-        header('Location:add.html')
+        if (isset($_POST["delproname"])){
+            $suppr=$_POST['delproname'];
+            $datasuppr="DELETE FROM produits WHERE id = $suppr";
+            $newBD->prepare($datasuppr)->execute(); 
+        }
+
+        header('Location:add.php')
 
 ?>

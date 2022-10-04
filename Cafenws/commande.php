@@ -33,7 +33,7 @@
             <a href="index.html">Accueil</a>
             <a href="commande.php">Commander</a>
             <a href="gestion.php">Voir les commandes</a>
-            <a href="add.html">Ajouter des produits</a>
+            <a href="add.php">Ajouter/Supprimer des produits</a>
           </div>
       </nav>
     <div class="container">
